@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.template import Template, Context
+from django.template.defaulttags import register
 from GestorDivisas.services import callAPI
 import datetime
 
@@ -16,8 +17,8 @@ def showdata(request):
     dataTemplate = Template(tmpFile.read())
     tmpFile.close()
     dt = datetime.datetime.now().strftime("%A, %d/%m/%Y, %I:%M:%S")
-    currencies = {
-        "USD": {
+    currencies = [
+        {
             "name": "USD",
             "sources": [
                 {
@@ -34,7 +35,7 @@ def showdata(request):
                 }
             ]
         },
-        "EUR": {
+        {
             "name": "EUR",
             "sources": [
                 {
@@ -51,7 +52,9 @@ def showdata(request):
                 }
             ]
         },
-    }
+    ]
     ctx = Context({"currencies": currencies, "DT": dt})
     document = dataTemplate.render(ctx)
     return HttpResponse(document)
+
+
