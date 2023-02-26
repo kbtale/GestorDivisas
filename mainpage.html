@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="src/css/{{CSS_THEME}}.css">
 </head>
 <body>
-    {{% for c in currencies %}}
+    {% for c in currencies %}
     <h2>{{c["name"}}</h2>
     <ul>
-        {{% for src in c["sources"] %}}
+        {% for src in c["sources"] %}
         <li>{{src["sourceName"]}}: {{src["value"]}}</li>
-        {{endfor}}
+        {endfor}
     </ul>
-    {{endfor}}
+    {endfor}
     <h3>Latest update: {{DT}}</h3>
 </body>
 </html>
