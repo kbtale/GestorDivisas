@@ -10,18 +10,48 @@ def welcome(request):  # A request object is the first argument
 
 
 def showdata(request):
+    sources = ["Banco Central de Venezuela", "DolarToday", "LocalBitcoin"]
     data = callAPI('https://s3.amazonaws.com/dolartoday/data.json')
     tmpFile = open("D:\Programming\Code\Python\GestorDivisas\GestorDivisas\mainpage.html")
     dataTemplate = Template(tmpFile.read())
     tmpFile.close()
     dt = datetime.datetime.now().strftime("%A, %d/%m/%Y, %I:%M:%S")
-    ctx = Context({"USD_BCV": data["USD"]["sicad2"],
-                    "USD_DT": data["USD"]["dolartoday"],
-                    "USD_LB": data["USD"]["localbitcoin_ref"],
-                    "EUR_BCV": data["EUR"]["sicad2"],
-                    "EUR_DT": data["EUR"]["dolartoday"],
-                    "EUR_LB": data["EUR"]["sicad1"],
-                    "DT": dt
-                    })
+    currencies = {
+        "USD": {
+            "name": "USD",
+            "sources": [
+                {
+                    "name": sources[0],
+                    "value": data["USD"]["sicad2"]
+                },
+                {
+                    "name": sources[1],
+                    "value": data["USD"]["dolartoday"]
+                },
+                {
+                    "name": sources[2],
+                    "value": data["USD"]["localbitcoin_ref"]
+                }
+            ]
+        },
+        "EUR": {
+            "name": "EUR",
+            "sources": [
+                {
+                    "name": sources[0],
+                    "value": data["EUR"]["sicad2"]
+                },
+                {
+                    "name": sources[1],
+                    "value": data["EUR"]["dolartoday"]
+                },
+                {
+                    "name": sources[2],
+                    "value": data["EUR"]["sicad1"]
+                }
+            ]
+        },
+    }
+    ctx = Context({"currencies": currencies, "DT": dt})
     document = dataTemplate.render(ctx)
     return HttpResponse(document)

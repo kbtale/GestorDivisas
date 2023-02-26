@@ -7,18 +7,14 @@
     <link rel="stylesheet" href="src/css/{{CSS_THEME}}.css">
 </head>
 <body>
-    <h2>USD</h2>
+    {{% for c in currencies %}}
+    <h2>{{c["name"}}</h2>
     <ul>
-        <li>BCV: {{USD_BCV}}</li>
-        <li>LocalBitcoins: {{USD_LB}}</li>
-        <li>DolarToday: {{USD_DT}}</li>
+        {{% for src in c["sources"] %}}
+        <li>{{src["sourceName"]}}: {{src["value"]}}</li>
+        {{endfor}}
     </ul>
-    <h2>EUR</h2>
-    <ul>
-        <li>BCV: {{EUR_BCV}}</li>
-        <li>LocalBitcoins: {{EUR_LB}}</li>
-        <li>DolarToday: {{EUR_DT}}</li>
-    </ul>
+    {{endfor}}
     <h3>Latest update: {{DT}}</h3>
 </body>
 </html>
