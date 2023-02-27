@@ -55,17 +55,15 @@
                         <div class="tab-content">
                             {% for c in currencies %}
                             <div class="tab-pane{% if c.name == 'USD' %} active show{% endif %}" id="TAB{{c.name}}">
-                                <div class="list-group list-group-flush list-group-hoverable">
-                                    <h3>{{c.name}}</h3>
+                                <div class="list-group list-group-flush list-group-hoverable mt-3">
                                     {% for src in c.sources %}
-                                    <div class="list-group-item">
-                                        <div class="row align-items-center">
+                                    <div class="list-group-item bg-light bg-gradient border-wide mb-2">
+                                        <div class="row align-items-center justify-content-between">
                                             <div class="col-auto">
-                                                <p class="fs-3">{{src.name}}</p>
+                                                <h5 class="fs-2 mt-1 mb-1"><img src="src/img/{{src.name}}.svg" alt="{{src.name}} Logo">{{src.name}}</h5>
                                             </div>
-                                            <div class="col-auto"></div>
                                             <div class="col-auto">
-                                                <p class="fs-3">{{src.value}}</p>
+                                                <h5 class="fs-2 mt-1 mb-1">Bs. {{src.value}}</h5>
                                             </div>
                                         </div>
                                     </div>

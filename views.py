@@ -11,7 +11,7 @@ def welcome(request):  # A request object is the first argument
 
 
 def showdata(request):
-    sources = ["Banco Central de Venezuela", "DolarToday", "LocalBitcoin"]
+    sources = ["Banco Central de Venezuela", "DolarToday", "LocalBitcoins"]
     data = callAPI('https://s3.amazonaws.com/dolartoday/data.json')
     tmpFile = open("D:\Programming\Code\Python\GestorDivisas\GestorDivisas\mainpage.html")
     dataTemplate = Template(tmpFile.read())
@@ -27,6 +27,7 @@ def showdata(request):
                        <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"></path>
                        <path d="M12 7v10"></path>
                     </svg>""",
+            "symbol": "	&#8364;",
             "sources": [
                 {
                     "name": sources[0],
@@ -53,6 +54,7 @@ def showdata(request):
                <path d="M7 13.5h4"></path>
             </svg>
             """,
+            "symbol": "&#36;",
             "sources": [
                 {
                     "name": sources[0],
