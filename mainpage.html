@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es-ve">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>GestorDivisas - Precio actualizado del dólar y el euro</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
     <link rel="stylesheet" href="src/css/{{CSS_THEME}}.css">
@@ -10,7 +10,7 @@
     <div class="page">
         <div class="navbar navbar-expand-md navbar-light d-print-none">
             <div class="container-xl">
-                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <h1 class="navbar-brand-autodark user-select-none tracking-wide d-none-navbar-horizontal pe-0 pe-md-3">
                     GestorDivisas
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
@@ -23,7 +23,7 @@
                                   Conversor
                             </a>
                             <a href="#" class="btn" rel="noreferrer">
-                                  Últimas Noticias
+                                  Ultimas Noticias
                             </a>
                             <a href="#" class="btn" rel="noreferrer">
                                   Acerca de
@@ -37,15 +37,35 @@
                 </div>
             </div>
         </div>
-        {% for c in currencies %}
-        <h2>{{c.name}}</h2>
-        <ul>
-            {% for src in c.sources %}
-            <li>{{src.name}}: {{src.value}}</li>
-            {% endfor %}
-        </ul>
-        {% endfor %}
-        <h3>Latest update: {{DT}}</h3>
+        <div class="m-2 mb-3 row g-2 align-items-center">
+            <span class="page-pretitle">Ultima carga del cliente</span>
+            <h4 class="page-title">{{DT}}</h4>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card card-sm">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                            {% for c in currencies %}
+                            <li class="nav-item fs-2"><a href="#TAB{{c.name}}" class="nav-link{% if c.name == 'USD' %} active{% endif %}" data-bs-toggle="tab">{{c.icon|safe}} {{c.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            {% for c in currencies %}
+                            <div class="tab-pane{% if c.name == 'USD' %} active show{% endif %}" id="TAB{{c.name}}">
+                                <h2>{{c.name}}</h2>
+                                {% for src in c.sources %}
+                                <p>{{src.name}}: {{src.value}}</p>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
 </body>
