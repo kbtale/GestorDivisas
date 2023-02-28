@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.template import Template, Context
+from django.template import Template, Context, loader
 from django.template.defaulttags import register
 from GestorDivisas.services import callAPI
 import datetime
@@ -11,6 +11,11 @@ def welcome(request):  # A request object is the first argument
 
 
 def showdata(request):
+    from django.conf import settings
+    print("hehe")
+    print(settings.BASE_DIR)
+    print(settings.STATIC_URL)
+    print("hehe")
     sources = ["Banco Central de Venezuela", "DolarToday", "LocalBitcoins"]
     data = callAPI('https://s3.amazonaws.com/dolartoday/data.json')
     tmpFile = open("D:\Programming\Code\Python\GestorDivisas\GestorDivisas\mainpage.html")
@@ -31,15 +36,18 @@ def showdata(request):
             "sources": [
                 {
                     "name": sources[0],
-                    "value": data["USD"]["sicad2"]
+                    "value": data["USD"]["sicad2"],
+                    "icon": 'https://svgshare.com/i/qgC.svg'
                 },
                 {
                     "name": sources[1],
-                    "value": data["USD"]["dolartoday"]
+                    "value": data["USD"]["dolartoday"],
+                    "icon": 'https://svgshare.com/i/qfv.svg'
                 },
                 {
                     "name": sources[2],
-                    "value": data["USD"]["localbitcoin_ref"]
+                    "value": data["USD"]["localbitcoin_ref"],
+                    "icon": 'https://svgshare.com/i/qgD.svg'
                 }
             ]
         },
@@ -58,15 +66,18 @@ def showdata(request):
             "sources": [
                 {
                     "name": sources[0],
-                    "value": data["EUR"]["sicad2"]
+                    "value": data["EUR"]["sicad2"],
+                    "icon": 'https://svgshare.com/i/qgC.svg'
                 },
                 {
                     "name": sources[1],
-                    "value": data["EUR"]["dolartoday"]
+                    "value": data["EUR"]["dolartoday"],
+                    "icon": 'https://svgshare.com/i/qfv.svg'
                 },
                 {
                     "name": sources[2],
-                    "value": data["EUR"]["sicad1"]
+                    "value": data["EUR"]["sicad1"],
+                    "icon": 'https://svgshare.com/i/qgD.svg'
                 }
             ]
         },
