@@ -14,7 +14,10 @@
 
 <hr>
 
-## 📋 Overview
+> [!NOTE]
+> **Project Status: Archived.** This project is completed, read-only, and archived. It has been configured with local offline fallbacks to ensure dashboard visualization remains functional post-archival.
+
+## Overview
 
 **GestorDivisas** is a simple web tool that fetches and displays the current exchange rates for the Venezuelan Bolivar (VES). It consumes external APIs to provide a comparison between different market markers.
 
@@ -29,3 +32,39 @@
 * **HTTP Client:** `requests` library for API consumption.
 * **Frontend:** HTML5 with [Tabler](https://tabler.io/) (Bootstrap-based UI kit).
 * **Data Source:** DolarToday S3 JSON endpoint.
+
+## Features
+
+* Displays current USD and EUR exchange rates.
+* Compares rates from BCV, DolarToday, and LocalBitcoins.
+* API Resilience: If the external DolarToday S3 JSON endpoint is offline or returns an invalid structure, the dashboard displays cached fallback exchange rates with a warning notice rather than throwing a 500 server error.
+
+## Installation
+
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Running the Application
+
+1. Start the development server:
+   ```bash
+   python manage.py runserver
+   ```
+2. Navigate to:
+   ```
+   http://127.0.0.1:8000/showdata/
+   ```
+
+## Verification
+
+To run system configuration and dependency checks:
+```bash
+python manage.py check
+```

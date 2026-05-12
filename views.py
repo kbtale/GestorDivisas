@@ -1,6 +1,5 @@
+from django.shortcuts import render
 from django.http import HttpResponse
-from django.template import Template, Context, loader
-from django.template.defaulttags import register
 from GestorDivisas.services import callAPI
 import datetime
 
@@ -11,16 +10,38 @@ def welcome(request):  # A request object is the first argument
 
 
 def showdata(request):
-    from django.conf import settings
-    print("hehe")
-    print(settings.BASE_DIR)
-    print(settings.STATIC_URL)
-    print("hehe")
     sources = ["Banco Central de Venezuela", "DolarToday", "LocalBitcoins"]
     data = callAPI('https://s3.amazonaws.com/dolartoday/data.json')
-    tmpFile = open("D:\Programming\Code\Python\GestorDivisas\GestorDivisas\mainpage.html")
-    dataTemplate = Template(tmpFile.read())
-    tmpFile.close()
+    offline = False
+
+    # Validate API response structure; fall back to reference demo data if API fails or changes format
+    try:
+        if not data or not isinstance(data, dict) or "USD" not in data or "EUR" not in data:
+            raise ValueError("API returned empty/invalid response")
+        # Ensure nested keys exist as well
+        for cur in ["USD", "EUR"]:
+            for key in ["sicad2", "dolartoday"]:
+                if key not in data[cur]:
+                    raise ValueError(f"Missing key {key} in {cur}")
+            if cur == "USD" and "localbitcoin_ref" not in data[cur]:
+                raise ValueError("Missing localbitcoin_ref in USD")
+            if cur == "EUR" and "sicad1" not in data[cur]:
+                raise ValueError("Missing sicad1 in EUR")
+    except Exception:
+        offline = True
+        data = {
+            "USD": {
+                "sicad2": "36.25",
+                "dolartoday": "43.50",
+                "localbitcoin_ref": "41.90"
+            },
+            "EUR": {
+                "sicad2": "39.10",
+                "dolartoday": "47.20",
+                "sicad1": "45.80"
+            }
+        }
+
     dt = datetime.datetime.now().strftime("%A, %d/%m/%Y, %I:%M:%S")
     currencies = [
         {
@@ -32,7 +53,7 @@ def showdata(request):
                        <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"></path>
                        <path d="M12 7v10"></path>
                     </svg>""",
-            "symbol": "	&#8364;",
+            "symbol": "&#36;",
             "sources": [
                 {
                     "name": sources[0],
@@ -62,7 +83,7 @@ def showdata(request):
                <path d="M7 13.5h4"></path>
             </svg>
             """,
-            "symbol": "&#36;",
+            "symbol": "&#8364;",
             "sources": [
                 {
                     "name": sources[0],
@@ -82,8 +103,7 @@ def showdata(request):
             ]
         },
     ]
-    ctx = Context({"currencies": currencies, "DT": dt})
-    document = dataTemplate.render(ctx)
-    return HttpResponse(document)
+    return render(request, 'mainpage.html', {"currencies": currencies, "DT": dt, "offline": offline})
+
 
 

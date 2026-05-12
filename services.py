@@ -12,7 +12,7 @@ def callAPI(APIurl,params={}):
         response = generateRequest(APIurl, params)
         if response:
             return response
-    except:
-        logging.WARNING("Fetch models from {APIurl} failed")
+    except Exception as e:
+        logging.warning(f"Fetch models from {APIurl} failed: {e}")
 
     return ''
